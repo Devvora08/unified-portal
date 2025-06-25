@@ -1,6 +1,12 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import {
+  ClerkProvider,
+} from '@clerk/nextjs'
+import Navbar from "@/modules/common/navbar";
+import Providers from "@/modules/common/providers";
+import { Toaster } from "sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,12 +29,30 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+          <Providers>
+            <Navbar />
+            <Toaster position="top-right" richColors />
+
+            {/* 🔮 Background Blobs */}
+            <div className="fixed inset-0 -z-10 pointer-events-none" aria-hidden="true">
+              {/* Amber Blob - Top Left */}
+              <div className="absolute top-[-90px] left-[-100px] w-[500px] h-[500px] bg-gradient-to-br from-amber-200 to-transparent rounded-full blur-3xl opacity-40" />
+
+              {/* Rose Blob - Bottom Right */}
+              <div className="absolute bottom-[-150px] right-[-100px] w-[600px] h-[600px] bg-gradient-to-tr from-rose-200 to-transparent rounded-full blur-3xl opacity-50" />
+
+              {/* Green Blob - Top Right */}
+              <div className="absolute top-[-80px] right-[50px] w-[400px] h-[400px] bg-gradient-to-bl from-green-200 to-transparent rounded-full blur-3xl opacity-40" />
+            </div>
+
+            {children}
+          </Providers>
+        </body>
+      </html>
+    </ClerkProvider>
   );
+
 }
